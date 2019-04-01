@@ -24,10 +24,13 @@ function process(){
 
 }
 
-function addCategory(){
-  var categoryName = $("#newCategory").val();
+function addCategory(categoryName){
+  if(!categoryName){
+   var categoryName = $("#newCategory").val();
+  }
   console.log("catName: " + categoryName);
   var textArea = $('<div><label>'+categoryName+'</label><br/><textarea style="padding-left:100px" id="'+categoryName+'" /></div>');
+  $(".newDay").show();
   $("#newDayMain").append(textArea);
   currentCategories.push(categoryName);
 }
@@ -60,11 +63,13 @@ function searchDate(date){
 
     var subData = dateData.match(/\w+::.*?((?=\s*\w+::)|(?=\s*$))/gs);
     console.log('subData: ', subData);
-    
+
     for (var i = 0; i < subData.length; i++) {
       var sectionArray = subData[i].split("::");
       console.log("0: " + sectionArray[0]);
       console.log("1: " + sectionArray[1]);
+      addCategory(sectionArray[0]);
+      $("#"+sectionArray[0]).text(sectionArray[1]);
     }
 
   }
@@ -80,4 +85,16 @@ function searchCat(cat){
   string = string.replace(/^\s*/,"");
   console.log("string: " + string);
   $("#result").val(string);
+}
+
+function saveDay() {
+  var textareas = $("#newDay textarea");
+  // console.log('textareas: ', textareas);
+  var dayString = "";
+  for (var i = 0; i < textareas.length; i++) {
+    console.log('textareas [0] id ', textareas[i].id);
+    console.log('textareas [0] innerHTML ', textareas[i].innerHTML);
+    dayString += textareas[i].id + "::" + textareas[i].innerHTML + "\n";
+  }
+console.log('dayString: ', dayString);
 }
