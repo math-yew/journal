@@ -3,6 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <style>
+    .editable-text{
+      width: 300px;
+      height:4em;
+    }
+    </style>
     <script
     src="https://code.jquery.com/jquery-3.2.1.js"
     integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
@@ -19,7 +25,7 @@ This is one
 two::
 This is two
 
-date::4/1/2019
+date::4/9/2019
 
 one::
 Another One
@@ -28,7 +34,9 @@ two::
 This too?
 
       </textarea>
+      <button onclick="copy()">PPA</button>
       <textarea id="result" rows="5" cols="50"></textarea>
+      <button onclick="copy()">Copy</button>
       <br/>
       <button onclick="process()">Process</button>
     </div>
