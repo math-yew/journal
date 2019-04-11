@@ -7,6 +7,10 @@ var currentCategories = [];
 
 function process(){
   var text = $("#text").val();
+  if(text == null || text == ""){
+    text = localStorage.getItem("masterText");
+    $("#text").val(text);
+  }
   masterText = text;
   var dateArr = text.match(/date:\s?\S+/gi);
   var trimmedDates = dateArr.map(x => x.replace(/date::\s?/i,""));
@@ -106,7 +110,7 @@ date = date.replace(/\//g,"\\/");
 var reg = new RegExp("date::\s?"+date+".*?((?=\s*date::)|(?=\s*$))", "gs");
 masterText = masterText.replace(reg,dayString);
 console.log("masterText:" + masterText);
-
+localStorage.setItem("masterText", masterText);
   $("#result").val(masterText);
 }
 
@@ -115,4 +119,14 @@ function copy(){
   copyText.select();
   document.execCommand("copy");
   alert("Copied the text: " + copyText.value);
+}
+
+function paste(){
+  var text = document.getElementById("text");
+  text.focus();
+  text.innerHTML = "";
+  // text.select();
+  //
+  console.log('paste: ', document.execCommand("paste"));
+  document.execCommand("paste");
 }
