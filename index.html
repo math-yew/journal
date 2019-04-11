@@ -16,8 +16,8 @@
   </head>
   <body>
     <div class="process">
-      <textarea id="text" rows="5" cols="50">
-date:: 1/1/2019
+      <textarea id="text" rows="5" cols="50" onclick="document.execCommand('paste');"></textarea>
+<!-- date:: 1/1/2019
 
 one::
 This is one
@@ -25,16 +25,14 @@ This is one
 two::
 This is two
 
-date::4/9/2019
+date::4/11/2019
 
 one::
 Another One
 
 two::
-This too?
+This too? -->
 
-      </textarea>
-      <button onclick="copy()">PPA</button>
       <textarea id="result" rows="5" cols="50"></textarea>
       <button onclick="copy()">Copy</button>
       <br/>
@@ -46,9 +44,10 @@ This too?
 
       <button onclick="addCategory()">Create</button>
       <div class="" id="newDayMain"></div>
-      <button onclick="save()">Save</button>
+      <!-- <button onclick="save()">Save</button> -->
       <button onclick="saveDay()">Save Day</button>
     </div>
+    <br/><br/><br/><br/><br/><br/>
     <div class="" id="dateResults">
       <h1 id="lookupDate"></h1>
       <div class="" id="lookupMain"></div>
