@@ -1,5 +1,6 @@
 var categories = [];
 let today = new Date().toLocaleDateString();
+console.log('today: ', today);
 var masterText = "";
 var currentCategories = [];
 // $("#textarea").autogrow();
@@ -11,19 +12,16 @@ function process(){
     $("#text").val(text);
   }
   masterText = text;
-  var trimmedDates = [];
-  if(masterText != null){
-    var dateArr = text.match(/date:\s?\S+/gi);
-    if(dateArr != null){
-      var trimmedDates = dateArr.map(x => x.replace(/date::\s?/i,""));
-    }
-  }
-
+  var dateArr = text.match(/date:\s?\S+/gi);
+  var trimmedDates = dateArr.map(x => x.replace(/date::\s?/i,""));
+  // var lastDate = dateArr[dateArr.length - 1];
+  console.log('dateArr: ', dateArr);
+  console.log('trimmedDates:' + trimmedDates + "::");
+  console.log("index of: " + trimmedDates.indexOf(today));
   if(trimmedDates.indexOf(today) == -1){
     console.log("false");
     $("#newDay").show();
     $("#today").text(today);
-    masterText += "\n" + "date::" + today + "\n"
   } else{
       console.log("true");
       searchDate(today)
@@ -75,10 +73,8 @@ function searchDate(date){
       var sectionArray = subData[i].split("::");
       console.log("0: " + sectionArray[0]);
       console.log("1: " + sectionArray[1]);
-      if(sectionArray[0] != "date"){
-        addCategory(sectionArray[0]);
-        $("#"+sectionArray[0]).text(sectionArray[1]);
-      }
+      addCategory(sectionArray[0]);
+      $("#"+sectionArray[0]).text(sectionArray[1]);
     }
 
   }
@@ -99,16 +95,16 @@ function searchCat(cat){
 function saveDay() {
   var textareas = $("#newDay textarea");
   console.log('textareas: ', textareas);
-  var date = $("#today").text();
-  var dayString = "date::" + date + "\n";
-  console.log($("#today").text(), 'date: ', date);
-  date = date.replace(/\//g,"\\/");
+  var dayString = "";
+  var date;
   for (var i = 0; i < textareas.length; i++) {
-    if(textareas[i].id.toLowerCase() != "date"){
-      dayString += textareas[i].id + "::" + textareas[i].value + "\n";
+    dayString += textareas[i].id + "::" + textareas[i].value + "\n";
+    if(textareas[i].id.toLowerCase() == "date"){
+      date = textareas[i].value
     }
   }
-console.log('dayString: ', dayString);
+date = date.replace(/\//g,"\\/");
+// console.log('date: ', date);
 
 // date::\s?3\/20\/2019.*?((?=\s*date::)|(?=\s*$))
 var reg = new RegExp("date::\s?"+date+".*?((?=\s*date::)|(?=\s*$))", "gs");
