@@ -75,7 +75,9 @@ function searchDate(date){
       var sectionArray = subData[i].split("::");
       console.log("0: " + sectionArray[0]);
       console.log("1: " + sectionArray[1]);
-      if(sectionArray[0] != "date"){
+      if(sectionArray[0] == "date"){
+        $("#today").text(sectionArray[1]);
+      }else{
         addCategory(sectionArray[0]);
         $("#"+sectionArray[0]).text(sectionArray[1]);
       }
