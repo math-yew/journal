@@ -136,3 +136,22 @@ function paste(){
   console.log('paste: ', document.execCommand("paste"));
   document.execCommand("paste");
 }
+
+var emailAddress = localStorage.getItem("emailAddress");
+$("#emailAddress").val(emailAddress);
+
+function setEmailAddress(){
+  emailAddress = $("#emailAddress").val();
+  localStorage.setItem("emailAddress", emailAddress);
+}
+
+function email(){
+  var body = localStorage.getItem("masterText");
+  var mailto = "mailto:"+emailAddress+"?subject=Journal&body="+body;
+  window.open(mailto);
+
+  // var mail = document.createElement("a");
+  //   mail.href = mailto;
+  //   mail.click();
+
+}
