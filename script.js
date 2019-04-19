@@ -35,11 +35,12 @@ function addCategory(categoryName){
   if(!categoryName){
    var categoryName = $("#newCategory").val();
   }
-  console.log("catName: " + categoryName);
   var textArea = $('<div><label>'+categoryName+'</label><br/><textarea class="editable-text" id="'+categoryName+'"/></div>');
   $(".newDay").show();
-  $("#newDayMain").append(textArea);
+  $("#newDayMain").prepend(textArea);
   currentCategories.push(categoryName);
+  $("#newCategory").val("");
+  $("#"+categoryName).focus();
 }
 
 function save(){
@@ -54,32 +55,38 @@ function save(){
 }
 
 function searchDate(date){
+  $("#newDayMain").empty();
   var text = masterText;
-  var reg = new RegExp("date::"+date+"(.|\n)*\S+:", "gi");
-  console.log("reg: " + reg);
+  // var reg = new RegExp("date::"+date+"(.|\n)*\S+:", "gi");
+  var reg = new RegExp("date::\s?"+date+".*?(?=date::)", "gsi");
+  console.log('reg: ', reg);
   var dateData = text.match(reg);
+  console.log('dateData: ', dateData);
+  // /*
   if(!dateData){
     reg = new RegExp("date::"+date+"(.|\n)*$", "gi");
     dateData = text.match(reg);
   }
+  console.log('reg: ', reg);
+  // */
   if(!dateData){
     console.log("Date not Found")
   }else{
     $("#newDayMain").empty();
     dateData += "";
-    console.log("dd: " + dateData);
 
-    var subData = dateData.match(/\w+::.*?((?=\s*\w+::)|(?=\s*$))/gs);
-
+    var subData = dateData.match(/\w+\s?::.*?((?=\s*\w+\s?::)|(?=\s*$))/gsi);
+    console.log("subData: " + subData);
     for (var i = 0; i < subData.length; i++) {
       var sectionArray = subData[i].split("::");
-      console.log("0: " + sectionArray[0]);
-      console.log("1: " + sectionArray[1]);
-      if(sectionArray[0] == "date"){
-        $("#today").text(sectionArray[1]);
+      var name = sectionArray[0].replace(/\s*$/,"");
+      var innerText = sectionArray[1].replace(/^\s*/,"");
+      console.log(i + ": " + name + ": " + innerText);
+      if(name == "date"){
+        $("#today").text(innerText);
       }else{
-        addCategory(sectionArray[0]);
-        $("#"+sectionArray[0]).text(sectionArray[1]);
+        addCategory(name);
+        $("#"+name).text(innerText);
       }
     }
 
@@ -107,7 +114,7 @@ function saveDay() {
   date = date.replace(/\//g,"\\/");
   for (var i = 0; i < textareas.length; i++) {
     if(textareas[i].id.toLowerCase() != "date"){
-      dayString += textareas[i].id + "::" + textareas[i].value + "\n";
+      dayString += textareas[i].id + "::\n" + textareas[i].value + "\n";
     }
   }
 console.log('dayString: ', dayString);
@@ -115,6 +122,8 @@ console.log('dayString: ', dayString);
 // date::\s?3\/20\/2019.*?((?=\s*date::)|(?=\s*$))
 var reg = new RegExp("date::\s?"+date+".*?((?=\s*date::)|(?=\s*$))", "gs");
 masterText = masterText.replace(reg,dayString);
+masterText = masterText.replace(/s:/gi,"s :"); //bug fix
+
 console.log("masterText:" + masterText);
 localStorage.setItem("masterText", masterText);
   $("#result").val(masterText);
@@ -154,4 +163,12 @@ function email(){
   //   mail.href = mailto;
   //   mail.click();
 
+}
+
+function dateSearch(){
+  saveDay();
+  var date = $("#searchDate").val();
+  var dateArr = date.split("-");
+  var newDate = dateArr[1].replace(/^0/,"") + "/" + dateArr[2].replace(/^0/,"") + "/" + dateArr[0];
+  searchDate(newDate);
 }
