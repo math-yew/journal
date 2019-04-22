@@ -8,6 +8,16 @@
       width: 300px;
       height:4em;
     }
+    .blink{
+      animation: green 1s;
+    }
+    @keyframes green {
+      from {background-color: green;}
+      to {background-color: white;}
+    }
+    .gray{
+      background-color: #ddd;
+    }
     </style>
     <script
     src="https://code.jquery.com/jquery-3.2.1.js"
@@ -19,28 +29,13 @@
     <button onclick="email()">Email</button>
     <br/>
     <div class="process">
-      <textarea id="text" rows="5" cols="40" onclick="document.execCommand('paste');"></textarea>
-<!-- date:: 1/1/2019
-
-one::
-This is one
-
-two::
-This is two
-
-date::4/11/2019
-
-one::
-Another One
-
-two::
-This too? -->
-
-      <textarea id="result" rows="5" cols="40"></textarea>
+      <textarea id="text" rows="5" cols="25"></textarea>
+      <textarea class="gray" id="result" rows="5" cols="25"></textarea>
       <button onclick="copy()">Copy</button>
       <br/>
-      <button onclick="process()">Process</button>
+      <button onclick="process()">Start</button>
     </div>
+    <hr/><!-- //////////////////////////////////////////////////////////// -->
     <br/>
     <div class="newDay" style="display:none" id="newDay">
       <h1 id="today"></h1>
@@ -53,15 +48,17 @@ This too? -->
     </div>
     <br/><br/>
     <input type="date" id="searchDate" onchange="dateSearch()">
-    <button onclick="dateSearch()">Change Date</button>
     <!-- <br/><br/><br/><br/><br/><br/>
     <div class="" id="dateResults">
       <h1 id="lookupDate"></h1>
       <div class="" id="lookupMain"></div>
       <button onclick="lookupSave()">lookup Save</button>
     </div>
-<br/>
-    <button onclick="searchCat('one')">Search</button> -->
+<br/> -->
+    <input type="text" id="search" value="day">
+    <button onclick="search()">Search</button>
+    <select id="searchCat" onchange="searchCat()"></select>
+    <button onclick="searchCat()">Search</button>
     <script src="script.js" type="text/javascript"></script>
   </body>
 </html>

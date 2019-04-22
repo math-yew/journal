@@ -2,7 +2,6 @@ var categories = [];
 let today = new Date().toLocaleDateString();
 var masterText = "";
 var currentCategories = [];
-// $("#textarea").autogrow();
 
 function process(){
   var text = $("#text").val();
@@ -11,6 +10,15 @@ function process(){
     $("#text").val(text);
   }
   masterText = text;
+  var cc = masterText.match(/\w+\s*(?=::)/g);
+  for (var i = 0; i < cc.length; i++) {
+    var cat = cc[i];
+    if(currentCategories.indexOf(cat) == -1 && cat != "date"){
+      currentCategories.push(cat);
+      $("#searchCat").append(new Option(cat, cat))
+    }
+  }
+  console.log("currentCategories: " + currentCategories);
   var trimmedDates = [];
   if(masterText != null){
     var dateArr = text.match(/date:\s?\S+/gi);
@@ -18,10 +26,9 @@ function process(){
       var trimmedDates = dateArr.map(x => x.replace(/date::\s?/i,""));
     }
   }
-
+  $("#newDay").show();
   if(trimmedDates.indexOf(today) == -1){
     console.log("false");
-    $("#newDay").show();
     $("#today").text(today);
     masterText += "\n" + "date::" + today + "\n"
   } else{
@@ -57,9 +64,7 @@ function save(){
 function searchDate(date){
   $("#newDayMain").empty();
   var text = masterText;
-  // var reg = new RegExp("date::"+date+"(.|\n)*\S+:", "gi");
   var reg = new RegExp("date::\s?"+date+".*?(?=date::)", "gsi");
-  console.log('reg: ', reg);
   var dateData = text.match(reg);
   console.log('dateData: ', dateData);
   // /*
@@ -70,7 +75,8 @@ function searchDate(date){
   console.log('reg: ', reg);
   // */
   if(!dateData){
-    console.log("Date not Found")
+    console.log("Date not Found");
+    $("#today").text(date+" NOT FOUND");
   }else{
     $("#newDayMain").empty();
     dateData += "";
@@ -93,18 +99,6 @@ function searchDate(date){
   }
 }
 
-function searchCat(cat){
-  var text = $("#text").val();
-  var array = text.split(cat + "::");
-  console.log("length: " + array.length);
-  console.log("[1]: " + array[1]);
-  var string = array[1];
-  string = string.replace(/\s*\w+\:\:(\s|\S)*$/,"");
-  string = string.replace(/^\s*/,"");
-  console.log("string: " + string);
-  $("#result").val(string);
-}
-
 function saveDay() {
   var textareas = $("#newDay textarea");
   console.log('textareas: ', textareas);
@@ -117,16 +111,19 @@ function saveDay() {
       dayString += textareas[i].id + "::\n" + textareas[i].value + "\n";
     }
   }
-console.log('dayString: ', dayString);
+  console.log('dayString: ', dayString);
 
-// date::\s?3\/20\/2019.*?((?=\s*date::)|(?=\s*$))
-var reg = new RegExp("date::\s?"+date+".*?((?=\s*date::)|(?=\s*$))", "gs");
-masterText = masterText.replace(reg,dayString);
-masterText = masterText.replace(/s:/gi,"s :"); //bug fix
+  // date::\s?3\/20\/2019.*?((?=\s*date::)|(?=\s*$))
+  var reg = new RegExp("date::\s?"+date+".*?((?=\s*date::)|(?=\s*$))", "gs");
+  masterText = masterText.replace(reg,dayString);
+  masterText = masterText.replace(/s:/gi,"s :"); //bug fix
 
-console.log("masterText:" + masterText);
-localStorage.setItem("masterText", masterText);
+  console.log("masterText:" + masterText);
+  localStorage.setItem("masterText", masterText);
   $("#result").val(masterText);
+  $("#result").removeClass("gray");
+  $("#result").addClass("blink");
+  setTimeout(function(){$("#result").removeClass("blink");},2000);
 }
 
 function copy(){
@@ -156,12 +153,9 @@ function setEmailAddress(){
 
 function email(){
   var body = localStorage.getItem("masterText");
+  body = body.replace(/\n/g," ");
   var mailto = "mailto:"+emailAddress+"?subject=Journal&body="+body;
   window.open(mailto);
-
-  // var mail = document.createElement("a");
-  //   mail.href = mailto;
-  //   mail.click();
 
 }
 
@@ -171,4 +165,36 @@ function dateSearch(){
   var dateArr = date.split("-");
   var newDate = dateArr[1].replace(/^0/,"") + "/" + dateArr[2].replace(/^0/,"") + "/" + dateArr[0];
   searchDate(newDate);
+}
+
+function searchCat(cat){
+  $("#newDayMain").empty();
+  var text = masterText;
+  var cat = $("#searchCat").val();
+  var reg = new RegExp("date::.*?" + cat + "\\s?::.*?((?=\\s*\\w+\\s?::)|(?=\\s*$))", "gsi");
+  // var reg = new RegExp(cat + "\\s?::.*?((?=\\s*\\w+\\s?::)|(?=\\s*$))", "gsi");
+  var catArr = text.match(reg);
+  console.log('catArr: ', catArr);
+
+  for (var i = 0; i < catArr.length; i++) {
+    var str = catArr[i];
+    var dateReg = new RegExp("(?!=date::\\s?)\\d+\/\\d+\/\\d+", "gsi");
+    var dateArr = str.match(dateReg);
+
+    var catReg = new RegExp(cat + "\\s?::.*?((?=\\s*\\w+\\s?::)|(?=\\s*$))", "gsi");
+    // var catReg = new RegExp("(?!=test\\s?::).*?((?=\\s*\\w+\\s?::)|(?=\\s*$))", "gsi");
+    var textArr = str.match(catReg);
+    var replaceReg = new RegExp(cat + "\\s?::\\s*", "gsi");
+    catText = textArr[0].replace(replaceReg,"");
+
+    console.log('dateArr[0]: ', dateArr[0]);
+    var date = dateArr[0];
+    console.log('catText: ', catText);
+    // console.log('textArr[0]: ', textArr[0]);
+
+
+    var p = $('<div><span onclick="searchDate(\''+date+'\')"><u><b>'+date+'</b></u></span><br/><p id="'+date+'">'+catText+'</p></div>');
+    $(".newDay").show();
+    $("#newDayMain").append(p);
+  }
 }
