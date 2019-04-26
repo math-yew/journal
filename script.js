@@ -124,6 +124,7 @@ function saveDay() {
   $("#result").removeClass("gray");
   $("#result").addClass("blink");
   setTimeout(function(){$("#result").removeClass("blink");},2000);
+  $("#text").val("");
 }
 
 function copy(){
@@ -167,7 +168,7 @@ function dateSearch(){
   searchDate(newDate);
 }
 
-function searchCat(cat){
+function searchCat(){
   $("#newDayMain").empty();
   var text = masterText;
   var cat = $("#searchCat").val();
@@ -182,19 +183,69 @@ function searchCat(cat){
     var dateArr = str.match(dateReg);
 
     var catReg = new RegExp(cat + "\\s?::.*?((?=\\s*\\w+\\s?::)|(?=\\s*$))", "gsi");
-    // var catReg = new RegExp("(?!=test\\s?::).*?((?=\\s*\\w+\\s?::)|(?=\\s*$))", "gsi");
     var textArr = str.match(catReg);
     var replaceReg = new RegExp(cat + "\\s?::\\s*", "gsi");
-    catText = textArr[0].replace(replaceReg,"");
+    var catText = textArr[0].replace(replaceReg,"");
 
     console.log('dateArr[0]: ', dateArr[0]);
     var date = dateArr[0];
     console.log('catText: ', catText);
-    // console.log('textArr[0]: ', textArr[0]);
-
 
     var p = $('<div><span onclick="searchDate(\''+date+'\')"><u><b>'+date+'</b></u></span><br/><p id="'+date+'">'+catText+'</p></div>');
     $(".newDay").show();
     $("#newDayMain").append(p);
   }
+}
+
+function search(){
+var text = masterText;
+  var word = $("#search").val();
+  // var reg = new RegExp("date::.*?" + word + ".*?((?=\\s*\\w+\\s?::)|(?=\\s*date\\s?::)|(?=\\s*$))", "gsi");
+
+  // var dates = text.match(/date\s?::.*?((?=\s*date\s?::)|(?=\s*$))/gsi);
+    var dates = text.split(/(?=date\s?::)/g);
+  console.log("dates: " + dates.length);
+console.log("dates: " + dates);
+
+  var searchResults = [];
+    var reg = new RegExp("date::.*?" + word + ".*?(date\\s?::|$)?", "gsi");
+    console.log('reg: ', reg);
+  for (var i = 0; i < dates.length; i++) {
+    if(dates[i].indexOf(word) > -1){
+      searchResults.push(dates[i]);
+    }
+  }
+
+  for (var i = 0; i < searchResults.length; i++) {
+    var str = searchResults[i];
+    var dateReg = new RegExp("(?!=date::\\s?)\\d+\/\\d+\/\\d+", "gsi");
+    var dateArr = str.match(dateReg);
+    var date = dateArr[0];
+
+    var subArr = str.split(/(?=\w\s?::)/g);
+
+  var subs = [];
+  for (var i = 0; i < subArr.length; i++) {
+    if(subArr[i].indexOf(word) > -1){
+      subs.push(subArr[i]);
+    }
+  }
+
+  for (var j = 0; j < subs.length; j++) {
+      var catReg = new RegExp("\\w+\\s?::.*?"+word+".*?((?=\\s*\\w+\\s?::)|(?=\\s*$))", "gsi");
+      var textArr = subs[j].match(catReg);
+      var replaceReg = new RegExp(word + "\\s?::\\s*", "gsi");
+      // var wordText = textArr[0].replace(replaceReg,"");
+      var wordText = textArr[0];
+
+      console.log('wordText: ', wordText);
+
+      var p = $('<div><span onclick="searchDate(\''+date+'\')"><u><b>'+date+'</b></u></span><br/><p id="'+date+'">'+wordText+'</p></div>');
+      $(".newDay").show();
+      $("#newDayMain").append(p);
+    }
+  }
+
+
+
 }
