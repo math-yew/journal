@@ -27,6 +27,7 @@ function process(){
     }
   }
   $("#newDay").show();
+  $("#searchDate").show();
   if(trimmedDates.indexOf(today) == -1){
     console.log("false");
     $("#today").text(today);
@@ -118,13 +119,14 @@ function saveDay() {
   masterText = masterText.replace(reg,dayString);
   masterText = masterText.replace(/s:/gi,"s :"); //bug fix
 
-  console.log("masterText:" + masterText);
-  localStorage.setItem("masterText", masterText);
-  $("#result").val(masterText);
-  $("#result").removeClass("gray");
-  $("#result").addClass("blink");
-  setTimeout(function(){$("#result").removeClass("blink");},2000);
-  $("#text").val("");
+  if(masterText != null && masterText != "") {
+    localStorage.setItem("masterText", masterText);
+    $("#result").val(masterText);
+    $("#result").removeClass("gray");
+    $("#result").addClass("blink");
+    setTimeout(function(){$("#result").removeClass("blink");},2000);
+    $("#text").val("");
+  }
 }
 
 function copy(){
