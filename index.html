@@ -38,8 +38,14 @@
     <hr/><!-- //////////////////////////////////////////////////////////// -->
     <br/>
     <div class="newDay" style="display:none" id="newDay">
-      <h1 id="today"></h1>
-      <p>Category: <input type="text" id="newCategory"/> <button onclick="addCategory()">Create</button></p>
+      <button onclick="saveDay()">Save Day</button>
+      <a href="javascript:void(0)" download="data.txt" id="download"  style="display:none">
+        Download Text
+      </a>
+      <h1 id="todayDate"></h1>
+      <p>Category:
+        <select id="selectCat" onchange="addCategory('select')"></select>
+        <input type="text" id="newCategory"/> <button onclick="addCategory()">Create</button></p>
 
       <div class="" id="newDayMain"></div>
       <!-- <button onclick="save()">Save</button> -->
@@ -47,17 +53,15 @@
       <button onclick="saveDay()">Save Day</button>
     </div>
     <br/><br/>
-    <input type="date" id="searchDate" style="display:none;" onchange="dateSearch()"><br/>
-    <!-- <br/><br/><br/><br/><br/><br/>
-    <div class="" id="dateResults">
-      <h1 id="lookupDate"></h1>
-      <div class="" id="lookupMain"></div>
-      <button onclick="lookupSave()">lookup Save</button>
-    </div>
-<br/> -->
-    <input type="text" id="search" value="day">
+    <hr/>
+    <p>Search Date: <input type="date" id="searchDate" style="display:none;" onchange="dateSearch()"></p>
+    <input type="text" id="search" value="">
     <button onclick="search()">Search</button></br>
-    <select id="searchCat" onchange="searchCat()"></select>
+    <p>Search Category: <select id="searchCat" onchange="searchCat()"></select></p>
+
+<br/><br/><br/>
+
+<!-- <button onclick="download()">Download</button></br> -->
 
     <script src="script.js" type="text/javascript"></script>
   </body>
