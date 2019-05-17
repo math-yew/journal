@@ -43,6 +43,7 @@
         Download Text
       </a>
       <h1 id="todayDate"></h1>
+      <p>Search Date: <input type="date" id="searchDate" style="display:none;" onchange="dateSearch()"></p>
       <p>Category:
         <select id="selectCat" onchange="addCategory('select')"></select>
         <input type="text" id="newCategory"/> <button onclick="addCategory()">Create</button></p>
@@ -54,7 +55,6 @@
     </div>
     <br/><br/>
     <hr/>
-    <p>Search Date: <input type="date" id="searchDate" style="display:none;" onchange="dateSearch()"></p>
     <input type="text" id="search" value="">
     <button onclick="search()">Search</button></br>
     <p>Search Category: <select id="searchCat" onchange="searchCat()"></select></p>

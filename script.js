@@ -81,7 +81,35 @@ function searchDate(date){
   // */
   if(!dateData){
     console.log("Date not Found");
-    $("#todayDate").text(date+" NOT FOUND");
+
+    var milli = Date.parse(date);
+    console.log('milli: ', milli);
+    var dateReg = new RegExp("(?!=date::\\s?)\\d+\/\\d+\/\\d+", "gsi");
+    var dateArr = text.match(dateReg);
+    console.log('dateArr: ', dateArr);
+    var insertAbove = "";
+    var breakLoop = false;
+    for (var i = 0; i < dateArr.length; i++) {
+      console.log('dateArr[i]: ', dateArr[i],Date.parse(dateArr[i]));
+      var nextMilli = Date.parse(dateArr[i]);
+      var test = nextMilli > milli ? true:false;
+      console.log(nextMilli +":"+ milli+': ' + test);
+      if(nextMilli > milli){
+        console.log(milli + ' Date.parse(dateArr[i]): ', nextMilli);
+        insertAbove = dateArr[i];
+        breakLoop = true;
+
+        var insertStr = "date::" + date + "\n" + "date::" + insertAbove;
+        console.log('insertStr: ', insertStr);
+        insertReg = new RegExp("date::\\s?"+insertAbove, "i");
+        masterText = masterText.replace(insertReg, insertStr);
+        break;
+        // if(breakLoop) break;
+      }
+    }
+
+
+    $("#todayDate").text(date);
   }else{
     $("#newDayMain").empty();
     dateData += "";
