@@ -44,6 +44,9 @@ function addCategory(categoryName){
   if(!categoryName){
    var categoryName = $("#newCategory").val();
   }
+  if(!categoryName){
+   return;
+  }
   if(categoryName == "select"){
    var categoryName = $("#selectCat").val();
   }
@@ -209,6 +212,7 @@ function searchCat(){
   var cat = $("#searchCat").val();
   var reg = new RegExp("date::.*?" + cat + "\\s?::.*?((?=\\s*\\w+\\s?::)|(?=\\s*$))", "gsi");
   // var reg = new RegExp(cat + "\\s?::.*?((?=\\s*\\w+\\s?::)|(?=\\s*$))", "gsi");
+  console.log('reg: ', reg);
   var catArr = text.match(reg);
   console.log('catArr: ', catArr);
 
@@ -216,6 +220,7 @@ function searchCat(){
     var str = catArr[i];
     var dateReg = new RegExp("(?!=date::\\s?)\\d+\/\\d+\/\\d+", "gsi");
     var dateArr = str.match(dateReg);
+    console.log('dateArr: ', dateArr);
 
     var catReg = new RegExp(cat + "\\s?::.*?((?=\\s*\\w+\\s?::)|(?=\\s*$))", "gsi");
     var textArr = str.match(catReg);
@@ -223,7 +228,7 @@ function searchCat(){
     var catText = textArr[0].replace(replaceReg,"");
 
     console.log('dateArr[0]: ', dateArr[0]);
-    var date = dateArr[0];
+    var date = dateArr[dateArr.length - 1];
     console.log('catText: ', catText);
 
     var p = $('<div><span onclick="searchDate(\''+date+'\')"><u><b>'+date+'</b></u></span><br/><p id="'+date+'">'+catText+'</p></div>');
@@ -253,6 +258,7 @@ var text = masterText;
 
   for (var i = 0; i < searchResults.length; i++) {
     var str = searchResults[i];
+    console.log("str: " + str);
     var dateReg = new RegExp("(?!=date::\\s?)\\d+\/\\d+\/\\d+", "gsi");
     var dateArr = str.match(dateReg);
     var date = dateArr[0];
