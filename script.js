@@ -159,6 +159,7 @@ function saveDay() {
     $("#result").val(masterText);
     $("#result").removeClass("gray");
     $("#result").addClass("blink");
+    $("textarea").addClass("blink");
     setTimeout(function(){$("#result").removeClass("blink");},2000);
     $("#text").val("");
     download();
@@ -251,10 +252,12 @@ var text = masterText;
   var reg = new RegExp("date::.*?" + word + ".*?(date\\s?::|$)?", "gsi");
   console.log('reg: ', reg);
   for (var i = 0; i < dates.length; i++) {
-    if(dates[i].indexOf(word) > -1){
+    if(dates[i].toLowerCase().indexOf(word.toLowerCase()) > -1){
       searchResults.push(dates[i]);
     }
   }
+console.log('searchResults: ', searchResults);
+$("#newDayMain").empty();
 
   for (var i = 0; i < searchResults.length; i++) {
     var str = searchResults[i];
@@ -271,7 +274,7 @@ var text = masterText;
 
     var subs = [];
     for (var j = 0; j < subArr.length; j++) {
-      if(subArr[j].indexOf(word) > -1){
+      if(subArr[j].toLowerCase().indexOf(word.toLowerCase()) > -1){
         console.log('subArr[j]: ', subArr[j]);
         var contents = subArr[j].split(/::\s*/si);
         // subs.push(subArr[j]);
