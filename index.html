@@ -31,8 +31,8 @@
     <button onclick="email()">Email</button>
     <br/>
     <div class="process">
-      <textarea id="text" rows="5" cols="25"></textarea>
-      <textarea class="gray" id="result" rows="5" cols="25"></textarea>
+      <textarea id="text" rows="5" cols="12"></textarea>
+      <textarea class="gray" id="result" rows="5" cols="12"></textarea>
       <button onclick="copy()">Copy</button>
       <br/>
       <button onclick="process()">Start</button>
@@ -44,7 +44,12 @@
       <a href="javascript:void(0)" download="data.txt" id="download"  style="display:none">
         Download Text
       </a>
-      <h1 id="todayDate"></h1>
+      <h1>
+        <!-- &#8592; &#8594;-->
+        <span onclick="yesterday()">&#171;</span>
+        <span id="todayDate"></span>
+        <span onclick="tomorrow()">&#187;</span>
+      </h1>
       <p>Search Date: <input type="date" id="searchDate" style="display:none;" onchange="dateSearch()"></p>
       <p>Category:
         <select id="selectCat" onchange="addCategory('select')"></select>

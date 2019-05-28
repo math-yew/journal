@@ -69,6 +69,20 @@ function save(){
   $("#result").val(masterText);
 }
 
+function yesterday(){
+  var date = $("#todayDate").text();
+  var dateArr = date.split("/");
+  var newDate = new Date(Date.parse(dateArr[2]+" "+dateArr[0]+" "+dateArr[1])-1000*60*60*24);
+  searchDate(newDate.toLocaleDateString());
+}
+
+function tomorrow(){
+  var date = $("#todayDate").text();
+  var dateArr = date.split("/");
+  var newDate = new Date(Date.parse(dateArr[2]+" "+dateArr[0]+" "+dateArr[1])+1000*60*60*24);
+  searchDate(newDate.toLocaleDateString());
+}
+
 function searchDate(date){
   $("#newDayMain").empty();
   var text = masterText;
