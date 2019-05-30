@@ -50,12 +50,27 @@ function addCategory(categoryName){
   if(categoryName == "select"){
    var categoryName = $("#selectCat").val();
   }
-  var textArea = $('<div><label>'+categoryName+'</label><br/><textarea class="editable-text" id="'+categoryName+'"/></div>');
+  var textArea = $('<div><label onclick="editCategory(\''+categoryName+'\')" id="label_' + categoryName +'">'+categoryName+'</label><br/><textarea class="editable-text" id="'+categoryName+'"/></div>');
   $(".newDay").show();
   $("#newDayMain").prepend(textArea);
   currentCategories.push(categoryName);
   $("#newCategory").val("");
   $("#"+categoryName).focus();
+}
+
+function editCategory(cat){
+  console.log('category: ', cat);
+  $("#label_"+cat).replaceWith( '<input id="change_' + cat + '" onblur="changeCategory(\''+cat+'\')"/>' );
+  $("#change_"+cat).focus();
+}
+
+function changeCategory(cat){
+  var categoryName = $("#change_"+cat).val();
+
+  $("#"+cat).attr("id",categoryName);
+
+  $("#change_"+cat).replaceWith('<label onclick="editCategory(\''+categoryName+'\')" id="label_' + categoryName +'">'+categoryName+'</label>');
+
 }
 
 function save(){
@@ -233,6 +248,7 @@ function searchCat(){
 
   for (var i = 0; i < catArr.length; i++) {
     var str = catArr[i];
+    console.log('str: ', str);
     var dateReg = new RegExp("(?!=date::\\s?)\\d+\/\\d+\/\\d+", "gsi");
     var dateArr = str.match(dateReg);
     console.log('dateArr: ', dateArr);
@@ -242,7 +258,6 @@ function searchCat(){
     var replaceReg = new RegExp(cat + "\\s?::\\s*", "gsi");
     var catText = textArr[0].replace(replaceReg,"");
 
-    console.log('dateArr[0]: ', dateArr[0]);
     var date = dateArr[dateArr.length - 1];
     console.log('catText: ', catText);
 
@@ -252,9 +267,18 @@ function searchCat(){
   }
 }
 
-function search(){
+function searchCat_jk(){
+  var inquiry = $("#searchCat").val();
+  search(inquiry);
+}
+
+function search(inquiry){
 var text = masterText;
-  var word = $("#search").val();
+  if(!inquiry){
+    var word = $("#search").val();
+  } else{
+    word = inquiry;
+  }
   // var reg = new RegExp("date::.*?" + word + ".*?((?=\\s*\\w+\\s?::)|(?=\\s*date\\s?::)|(?=\\s*$))", "gsi");
 
   // var dates = text.match(/date\s?::.*?((?=\s*date\s?::)|(?=\s*$))/gsi);
@@ -330,4 +354,11 @@ function download (){
 downloadUrl = URL.createObjectURL( blob );
 $("#download").show();
 $("#download").attr("href",downloadUrl);
+}
+
+function cleanup(){
+  masterText = masterText.replace(/(?!=\d)-(?=\d)/gi,"/");
+  masterText = masterText.replace(/(?!=\d)\/19(?=[^/])/gi,"/2019");
+  masterText = masterText.replace(/date:\s?(?=\d)/gi,"Date::");
+
 }
